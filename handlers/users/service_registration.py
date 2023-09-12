@@ -11,7 +11,7 @@ from helpers.utils import __get_phone_number
 from keyboards.reply import phone_number_button, services_menu, continue_kb
 
 
-def __get_file_id(message: types.Message) -> str | None:
+def __get_file_id(message: types.Message) -> str or None:
     """Получаем id отправленного файла, в зависимости от того, как его отправил пользователь."""
     file_id = None
 
