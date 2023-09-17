@@ -83,7 +83,7 @@ def get_activity_process_registration(message: types.Message, fullname, phone_nu
 Если нет, то на кнопку 'Не добавлять' и мы присвоим вашей услуге уже готовые хештеги, что представлены выше
 """
 
-    bot.send_message(chat_id, msg, reply_markup=continue_kb())
+    bot.send_message(chat_id, msg, reply_markup=continue_kb(), parse_mode="HTML")
     bot.register_next_step_handler(message, get_service_process_tags, fullname, phone_number, file_id, service_id)
 
 
