@@ -45,7 +45,7 @@ def create_simple_user(user_data):
 
 def create_user_request(request_data):
     endpoint = BASE_URL + "/services/create/"
-    resp = requests.post(endpoint, request_data)
+    requests.post(endpoint, request_data)
 
 
 def check_verification_code(verification_code):
@@ -71,3 +71,16 @@ def add_hashtags_to_service(service_id, tags_list):
     requests.post(endpoint, data=data)
 
 
+def get_user(chat_id):
+    endpoint = BASE_URL + f'/users/{chat_id}'
+    resp = requests.get(endpoint).json()
+    return resp
+
+
+
+class UserRepository:
+    """Api calls for users"""
+
+
+class ServiceRepository:
+    """Api calls for services"""

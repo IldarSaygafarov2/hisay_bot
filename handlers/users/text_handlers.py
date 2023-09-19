@@ -1,8 +1,11 @@
 from telebot import types
 
 from data.loader import bot
+from data.config import CHANNEL_ID
 from helpers import api
-from keyboards.reply import services_menu, location_menu, continue_kb, start_menu
+from keyboards.reply import services_menu, location_menu, continue_kb
+from keyboards.inline import new_tags_admin_action
+
 from .commands import command_start
 
 
@@ -76,10 +79,25 @@ def get_service_process_tags(message: types.Message, title, description, usernam
 def generate_new_tags(message: types.Message, title, description, username, service_id):
     chat_id = message.chat.id
     tags = [tag.strip() for tag in message.text.split(',')]
-    api.add_hashtags_to_service(service_id=service_id['service_id'], tags_list=tags)
-    bot.send_message(chat_id, "Нажмите на кнопку ниже чтобы мы смогли сохранить вашу локацию",
-                     reply_markup=location_menu())
-    bot.register_next_step_handler(message, collect_all_data, title, description, username, service_id)
+
+    user = api.get_user(chat_id)
+
+    bot.send_message(CHANNEL_ID, f'Пользователь: @{user["tg_username"]} отправил теги на модерацию')
+    for tag in tags:
+        bot.send_message(CHANNEL_ID, tag, reply_markup=new_tags_admin_action(tag, chat_id))
+
+    # bot.send_message(chat_id, "Ваши теги отправились на модерацию. Ждите ответа")
+    # bot.register_next_step_handler()
+    # api.add_hashtags_to_service(service_id=service_id['service_id'], tags_list=tags)
+    #
+    # bot.send_message(chat_id, "Нажмите на кнопку ниже чтобы мы смогли сохранить вашу локацию",
+    #                  reply_markup=location_menu())
+    # bot.register_next_step_handler(message, collect_all_data, title, description, username, service_id)
+
+
+def moderate_tags_get_answer(message: types.Message, title, description, username, service_id):
+    print(message)
+
 
 
 def collect_all_data(message: types.Message, title, description, username, service):
